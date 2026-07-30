@@ -21,12 +21,14 @@ engine_core_prepare() {
 
     engine_selector_run
 
+    engine_scheduler_run
+
     return 0
 }
 
 engine_core_execute() {
 
-    dispatcher_run "$(engine_selector_list)"
+    dispatcher_run "$(engine_scheduler_list)"
 
     return $?
 }
