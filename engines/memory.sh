@@ -1,15 +1,23 @@
 #!/system/bin/sh
-#
-# APEX
-# Component : Engine
-# File      : memory.sh
-# Purpose   : Memory engine
-#
-# SPDX-License-Identifier: MIT
-#
 
-engine_memory_apply() {
-    logger_write "ENGINE" "Memory engine executed."
+. /data/adb/modules/APEX/lib/engine.sh
+
+ENGINE_NAME="Memory"
+
+init() {
+    return 0
 }
 
-# End of File
+apply() {
+    return 0
+}
+
+verify() {
+    return 0
+}
+
+restore() {
+    return 0
+}
+
+run_engine
