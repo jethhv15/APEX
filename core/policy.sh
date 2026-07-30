@@ -17,6 +17,10 @@ policy_deny() {
 }
 
 policy_check() {
+    local action="$1"
+
+    [ -n "$action" ] || return 1
+
     policy_allow
 }
 
