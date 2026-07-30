@@ -1,15 +1,23 @@
 #!/system/bin/sh
-#
-# APEX
-# Component : Engine
-# File      : network.sh
-# Purpose   : Network engine
-#
-# SPDX-License-Identifier: MIT
-#
 
-engine_network_apply() {
-    logger_write "ENGINE" "Network engine executed."
+. /data/adb/modules/APEX/lib/engine.sh
+
+ENGINE_NAME="Network"
+
+init() {
+    return 0
 }
 
-# End of File
+apply() {
+    return 0
+}
+
+verify() {
+    return 0
+}
+
+restore() {
+    return 0
+}
+
+run_engine
