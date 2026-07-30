@@ -8,7 +8,6 @@
 # SPDX-License-Identifier: MIT
 #
 
-# Check whether a string contains another string.
 string_contains() {
     case "$1" in
         *"$2"*) return 0 ;;
@@ -16,19 +15,16 @@ string_contains() {
     esac
 }
 
-# Convert string to lowercase.
 string_lower() {
     printf "%s" "$1" | tr '[:upper:]' '[:lower:]'
 }
 
-# Convert string to uppercase.
 string_upper() {
     printf "%s" "$1" | tr '[:lower:]' '[:upper:]'
 }
 
-# Trim leading and trailing spaces.
 string_trim() {
-    printf "%s" "$1" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'
+    printf "%s" "$1" | awk '{$1=$1};1'
 }
 
 # End of File
