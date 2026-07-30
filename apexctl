@@ -1,0 +1,19 @@
+#!/system/bin/sh
+#
+# APEX
+# CLI Utility
+#
+# SPDX-License-Identifier: MIT
+#
+
+case "$1" in
+    version)
+        echo "APEX v0.1.0"
+        ;;
+    health)
+        health_check
+        ;;
+    *)
+        echo "Usage: apexctl {version|health}"
+        ;;
+esac
