@@ -14,6 +14,8 @@ audit_android() {
 
     activity_run
 
+    surface_run
+
     logger_write "AUDIT" "Android audit finished."
 
     return 0
