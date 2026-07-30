@@ -21,6 +21,10 @@ decision_evaluate() {
 
     local rule
 
+    profile_evaluate
+
+    logger_write "DECISION" "Profile: $(profile_get)"
+
     for rule in $(rule_list)
     do
         logger_write "DECISION" "Evaluating rule: $rule"
