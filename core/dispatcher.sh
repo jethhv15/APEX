@@ -3,27 +3,33 @@
 # APEX
 # Component : Core
 # File      : dispatcher.sh
-# Purpose   : Dispatcher manager
+# Purpose   : Engine dispatcher
 #
 # SPDX-License-Identifier: MIT
 #
 
 dispatcher_run() {
-    local task="$1"
+    decision_evaluate
+    decision_log
 
-    if [ -z "$task" ]; then
-        logger_warn "DISPATCHER" "No task specified."
+    if ! decision_should_apply; then
+        logger_write "DISPATCHER" "Skip: $(decision_reason)"
         return 1
     fi
 
-    if ! command -v "$task" >/dev/null 2>&1; then
-        logger_error "DISPATCHER" "Task not found: $task"
-        return 1
-    fi
+    logger_write "DISPATCHER" "Applying profile: $(context_get_profile)"
 
-    logger_write "DISPATCHER" "Run: $task"
+    engine_power_apply
+    engine_display_apply
+    engine_surface_apply
+    engine_input_apply
+    engine_network_apply
+    engine_memory_apply
+    engine_gamemanager_apply
 
-    "$task"
+    logger_write "DISPATCHER" "Engine pipeline completed."
+
+    return 0
 }
 
 # End of File
