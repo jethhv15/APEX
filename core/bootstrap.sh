@@ -20,7 +20,6 @@ bootstrap_load_config() {
 bootstrap_init() {
 
     logger_init
-
     logger_write "BOOT" "Bootstrap started."
 
     bootstrap_load_config
@@ -40,9 +39,21 @@ bootstrap_init() {
     audit_android
     audit_game_detect
 
-    dispatcher_run
+    decision_run || {
+        logger_write "BOOT" "Decision failed."
+        return 1
+    }
 
-    verify_run
+    dispatcher_run || {
+        logger_write "BOOT" "Dispatcher failed."
+        return 1
+    }
+
+    verify_run || {
+        logger_write "BOOT" "Verification failed."
+        restore_run
+        return 1
+    }
 
     logger_write "BOOT" "Bootstrap completed."
 
