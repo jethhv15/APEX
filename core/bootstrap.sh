@@ -28,11 +28,9 @@ bootstrap_init() {
 
     analyzer_run
 
-    decision_run
+    decision_run || return 1
 
-    dispatcher_run
-
-    verify_run
+    engine_core_run || return 1
 
     logger_write
 
