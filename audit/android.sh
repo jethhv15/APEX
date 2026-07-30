@@ -15,6 +15,7 @@ audit_android() {
     activity_run
     surface_run
     input_run
+    game_run
 
     logger_write "AUDIT" "Android audit finished."
 
