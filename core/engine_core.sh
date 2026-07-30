@@ -35,7 +35,7 @@ engine_core_execute() {
 
 engine_core_verify() {
 
-    verify_run
+    runtime_verify_run
 
     return $?
 }
