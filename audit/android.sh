@@ -16,6 +16,7 @@ audit_android() {
     surface_run
     input_run
     game_run
+    thermal_run
 
     logger_write "AUDIT" "Android audit finished."
 
