@@ -14,8 +14,13 @@ runtime_verify_run() {
 
     if verify_run
     then
+
         logger_write "VERIFY" "Runtime verification passed."
+
+        report_generate
+
         return 0
+
     fi
 
     logger_write "VERIFY" "Runtime verification failed."
