@@ -15,19 +15,45 @@ bootstrap_load_config() {
 
 bootstrap_init() {
 
+    #
+    # Logger
+    #
     logger_init
 
+    #
+    # Framework Manifest
+    #
+    manifest_show
+
+    #
+    # Configuration
+    #
     bootstrap_load_config
 
+    #
+    # Runtime Integrity
+    #
     integrity_check || return 1
 
+    #
+    # Reset Runtime Context
+    #
     context_reset
     registry_reset
 
+    #
+    # Runtime Initialization
+    #
     runtime_init
 
+    #
+    # Capability Detection
+    #
     capability_scan
 
+    #
+    # Health Check
+    #
     health_check
 
     #
@@ -41,17 +67,17 @@ bootstrap_init() {
     audit_android
 
     #
-    # Analysis
+    # Evidence Analysis
     #
     analyzer_run
 
     #
-    # Decision
+    # Runtime Decision
     #
     decision_run || return 1
 
     #
-    # Engine Execution
+    # Execute Selected Engines
     #
     engine_core_run || return 1
 
@@ -61,11 +87,12 @@ bootstrap_init() {
     benchmark_collect
 
     #
-    # Flush Log
+    # Flush Log Buffer
     #
     logger_write
 
     return 0
+
 }
 
 # End of File
