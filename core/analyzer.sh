@@ -21,12 +21,7 @@ analyzer_run() {
 
     analyzer_init
 
-    for file in "$ANALYZER_DIR"/*.log
-    do
-        [ -f "$file" ] || continue
-
-        logger_write "ANALYZER" "Analyzing $(basename "$file")"
-    done
+    activity_analyze
 
     logger_write "ANALYZER" "Analysis completed."
 
