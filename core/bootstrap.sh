@@ -26,6 +26,11 @@ bootstrap_init() {
     manifest_show
 
     #
+    # Release Information
+    #
+    release_show
+
+    #
     # Configuration
     #
     bootstrap_load_config
@@ -77,7 +82,7 @@ bootstrap_init() {
     decision_run || return 1
 
     #
-    # Execute Selected Engines
+    # Engine Execution
     #
     engine_core_run || return 1
 
