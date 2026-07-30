@@ -27,6 +27,7 @@ analyzer_run() {
     game_analyze
     thermal_analyze
     power_analyze
+    binder_analyze
 
     logger_write "ANALYZER" "Analysis completed."
 
