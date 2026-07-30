@@ -20,6 +20,7 @@ audit_android() {
     power_run
     binder_run
     lmkd_run
+    hwui_run
 
     logger_write "AUDIT" "Android audit finished."
 
