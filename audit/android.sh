@@ -13,8 +13,8 @@ audit_android() {
     logger_write "AUDIT" "Android audit started."
 
     activity_run
-
     surface_run
+    input_run
 
     logger_write "AUDIT" "Android audit finished."
 
