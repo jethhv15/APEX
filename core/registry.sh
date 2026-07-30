@@ -9,19 +9,19 @@
 #
 
 registry_set() {
-    eval "REG_$1=\"\$2\""
+    export "REG_$1=$2"
 }
 
 registry_get() {
-    eval "printf '%s' \"\$REG_$1\""
+    eval "printf '%s' \"\${REG_$1}\""
 }
 
 registry_exists() {
-    eval "[ -n \"\$REG_$1\" ]"
+    [ -n "$(registry_get "$1")" ]
 }
 
 registry_clear() {
-    eval "unset REG_$1"
+    unset "REG_$1"
 }
 
 registry_reset() {
