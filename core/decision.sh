@@ -16,6 +16,11 @@ decision_execute() {
         return 1
     fi
 
+    if ! policy_check "$action"; then
+        logger_warn "DECISION" "Policy denied: $action"
+        return 1
+    fi
+
     logger_write "DECISION" "Execute: $action"
 
     "$action"
