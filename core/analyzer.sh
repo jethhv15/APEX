@@ -22,6 +22,7 @@ analyzer_run() {
     analyzer_init
 
     activity_analyze
+    surface_analyze
 
     logger_write "ANALYZER" "Analysis completed."
 
