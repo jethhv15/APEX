@@ -3,7 +3,6 @@
 # APEX
 # Component : Core
 # File      : runtime_verify.sh
-# Purpose   : Runtime Verification
 #
 # SPDX-License-Identifier: MIT
 #
@@ -19,9 +18,11 @@ runtime_verify_run() {
 
         report_generate
 
-        validation_run
+        validation_run || return 1
 
-        return $?
+        benchmark_compare
+
+        return 0
 
     fi
 
