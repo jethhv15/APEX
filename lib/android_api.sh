@@ -3,14 +3,10 @@
 # APEX
 # Component : Library
 # File      : android_api.sh
-# Purpose   : Android framework information wrapper
+# Purpose   : Android API wrapper
 #
 # SPDX-License-Identifier: MIT
 #
-
-# ==========================
-# Public API
-# ==========================
 
 android_get_sdk() {
     prop_get ro.build.version.sdk
@@ -68,6 +64,4 @@ android_is_debuggable() {
     prop_equals ro.debuggable 1
 }
 
-# ==========================
 # End of File
-# ==========================
