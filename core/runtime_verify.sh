@@ -19,7 +19,9 @@ runtime_verify_run() {
 
         report_generate
 
-        return 0
+        validation_run
+
+        return $?
 
     fi
 
