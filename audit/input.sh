@@ -3,31 +3,29 @@
 # APEX
 # Component : Audit
 # File      : input.sh
-# Purpose   : Input audit
+# Purpose   : InputDispatcher Collector
 #
 # SPDX-License-Identifier: MIT
 #
 
-INPUT_SERVICE=0
-INPUT_DEVICES=0
+input_dump() {
 
-audit_input() {
-    if service list 2>/dev/null | grep -q "input"; then
-        INPUT_SERVICE=1
-    fi
+    local out
 
-    INPUT_DEVICES="$(find /dev/input -type c 2>/dev/null | wc -l)"
+    out="$APEX_LOG/input_$(date +%Y%m%d_%H%M%S).log"
 
-    logger_write "INPUT" \
-        "service=$INPUT_SERVICE devices=$INPUT_DEVICES"
+    dumpsys input > "$out"
+
+    logger_write "AUDIT" "InputDispatcher -> $out"
 }
 
-input_get_service() {
-    printf "%s" "$INPUT_SERVICE"
-}
+input_run() {
 
-input_get_devices() {
-    printf "%s" "$INPUT_DEVICES"
+    pidof com.tencent.ig >/dev/null 2>&1 || return 1
+
+    input_dump
+
+    return 0
 }
 
 # End of File
