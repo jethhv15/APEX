@@ -19,12 +19,14 @@ engine_core_prepare() {
 
     logger_write "ENGINE" "Preparing runtime."
 
+    engine_selector_run
+
     return 0
 }
 
 engine_core_execute() {
 
-    dispatcher_run
+    dispatcher_run "$(engine_selector_list)"
 
     return $?
 }
