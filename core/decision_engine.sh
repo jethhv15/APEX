@@ -12,12 +12,19 @@ decision_init() {
 
     logger_write "DECISION" "Decision Engine initialized."
 
+    rule_init
+
     return 0
 }
 
 decision_evaluate() {
 
-    logger_write "DECISION" "Evaluating analyzer results."
+    local rule
+
+    for rule in $(rule_list)
+    do
+        logger_write "DECISION" "Evaluating rule: $rule"
+    done
 
     return 0
 }
