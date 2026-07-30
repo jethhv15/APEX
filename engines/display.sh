@@ -2,10 +2,13 @@
 
 . /data/adb/modules/APEX/lib/engine.sh
 
-display="Display"
+ENGINE_NAME="Display"
+
+init() {
+    return 0
+}
 
 apply() {
-    # TODO
     return 0
 }
 
