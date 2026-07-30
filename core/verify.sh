@@ -9,18 +9,21 @@
 #
 
 verify_result() {
+    [ "$1" = "$2" ]
+}
+
+verify_execute() {
     local expected="$1"
     local actual="$2"
+    local tag="$3"
 
-    [ "$expected" = "$actual" ]
-}
+    if verify_result "$expected" "$actual"; then
+        logger_write "VERIFY" "$tag: PASS"
+        return 0
+    fi
 
-verify_success() {
-    logger_write "VERIFY" "$1"
-}
-
-verify_failure() {
-    logger_error "VERIFY" "$1"
+    logger_error "VERIFY" "$tag: FAIL"
+    return 1
 }
 
 # End of File
