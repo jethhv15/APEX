@@ -28,7 +28,7 @@ engine_core_prepare() {
 
 engine_core_execute() {
 
-    dispatcher_run "$(engine_scheduler_list)"
+    engine_executor_run
 
     return $?
 }
