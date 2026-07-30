@@ -29,6 +29,7 @@ analyzer_run() {
     power_analyze
     binder_analyze
     lmkd_analyze
+    hwui_analyze
 
     logger_write "ANALYZER" "Analysis completed."
 
