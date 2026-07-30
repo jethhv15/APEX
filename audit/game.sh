@@ -3,15 +3,37 @@
 # APEX
 # Component : Audit
 # File      : game.sh
-# Purpose   : Game audit
+# Purpose   : Detect running game
 #
 # SPDX-License-Identifier: MIT
 #
 
-audit_game() {
-    registry_set GAME_PACKAGE "$(context_get_package)"
-    registry_set GAME_PID "$(context_get_pid)"
-    registry_set GAME_PROFILE "$(context_get_profile)"
+GAME_PACKAGES="
+com.tencent.ig
+com.garena.game.codm
+"
+
+audit_game_detect() {
+    local pkg pid
+
+    for pkg in $GAME_PACKAGES; do
+        pid="$(pidof "$pkg" 2>/dev/null)"
+
+        [ -z "$pid" ] && continue
+
+        context_set_package "$pkg"
+        context_set_pid "$pid"
+
+        logger_write "GAME" "Detected $pkg (PID=$pid)"
+
+        return 0
+    done
+
+    context_reset
+
+    logger_write "GAME" "No supported game detected."
+
+    return 1
 }
 
 # End of File
