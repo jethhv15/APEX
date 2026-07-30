@@ -19,6 +19,7 @@ audit_android() {
     thermal_run
     power_run
     binder_run
+    lmkd_run
 
     logger_write "AUDIT" "Android audit finished."
 
