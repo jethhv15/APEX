@@ -25,6 +25,8 @@ decision_evaluate() {
 
     logger_write "DECISION" "Profile: $(profile_get)"
 
+    policy_evaluate || return 1
+
     for rule in $(rule_list)
     do
         logger_write "DECISION" "Evaluating rule: $rule"
@@ -44,7 +46,7 @@ decision_run() {
 
     decision_init
 
-    decision_evaluate
+    decision_evaluate || return 1
 
     decision_finalize
 
