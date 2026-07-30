@@ -8,21 +8,32 @@
 # SPDX-License-Identifier: MIT
 #
 
-RUNTIME_STARTED=0
+RUNTIME_STATE="STOPPED"
 
 runtime_init() {
+    if runtime_is_ready; then
+        return 0
+    fi
+
     logger_init
-    RUNTIME_STARTED=1
+
+    RUNTIME_STATE="RUNNING"
+
     logger_write "RUNTIME" "Runtime initialized."
 }
 
 runtime_is_ready() {
-    [ "$RUNTIME_STARTED" -eq 1 ]
+    [ "$RUNTIME_STATE" = "RUNNING" ]
 }
 
 runtime_shutdown() {
+    if ! runtime_is_ready; then
+        return 0
+    fi
+
     logger_write "RUNTIME" "Runtime shutdown."
-    RUNTIME_STARTED=0
+
+    RUNTIME_STATE="STOPPED"
 }
 
 # End of File
