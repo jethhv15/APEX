@@ -15,6 +15,8 @@ bootstrap_init() {
 
     bootstrap_load_config
 
+    integrity_check || return 1
+
     context_reset
     registry_reset
 
