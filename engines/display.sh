@@ -1,15 +1,20 @@
 #!/system/bin/sh
-#
-# APEX
-# Component : Engine
-# File      : display.sh
-# Purpose   : Display engine
-#
-# SPDX-License-Identifier: MIT
-#
 
-engine_display_apply() {
-    logger_write "ENGINE" "Display engine executed."
+. /data/adb/modules/APEX/lib/engine.sh
+
+display="Display"
+
+apply() {
+    # TODO
+    return 0
 }
 
-# End of File
+verify() {
+    return 0
+}
+
+restore() {
+    return 0
+}
+
+run_engine
