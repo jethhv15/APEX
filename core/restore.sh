@@ -16,8 +16,15 @@ restore_execute() {
         return 1
     fi
 
+    if ! file_exists "${target}.bak"; then
+        logger_warn "RESTORE" "Backup not found: ${target}.bak"
+        return 1
+    fi
+
     file_restore "$target"
     logger_write "RESTORE" "Restored: $target"
+
+    return 0
 }
 
 # End of File
