@@ -28,6 +28,7 @@ analyzer_run() {
     thermal_analyze
     power_analyze
     binder_analyze
+    lmkd_analyze
 
     logger_write "ANALYZER" "Analysis completed."
 
