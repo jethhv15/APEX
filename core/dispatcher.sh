@@ -1,35 +1,46 @@
 #!/system/bin/sh
-#
-# APEX
-# Component : Core
-# File      : dispatcher.sh
-# Purpose   : Engine dispatcher
-#
-# SPDX-License-Identifier: MIT
-#
 
-dispatcher_run() {
-    decision_evaluate
-    decision_log
+DECISION="/data/adb/modules/APEX/logs/decision.prop"
 
-    if ! decision_should_apply; then
-        logger_write "DISPATCHER" "Skip: $(decision_reason)"
-        return 1
+[ -f "$DECISION" ] || exit 1
+
+. "$DECISION"
+
+run_engine() {
+    NAME="$1"
+    SCRIPT="$2"
+
+    echo "[Dispatcher] $NAME"
+
+    if [ -x "$SCRIPT" ]; then
+        sh "$SCRIPT"
+    else
+        echo "[Dispatcher] Missing $SCRIPT"
     fi
-
-    logger_write "DISPATCHER" "Applying profile: $(context_get_profile)"
-
-    engine_power_apply
-    engine_display_apply
-    engine_surface_apply
-    engine_input_apply
-    engine_network_apply
-    engine_memory_apply
-    engine_gamemanager_apply
-
-    logger_write "DISPATCHER" "Engine pipeline completed."
-
-    return 0
 }
 
-# End of File
+####################################################
+# Display
+####################################################
+
+[ "$ENABLE_DISPLAY" = "1" ] && \
+run_engine "Display Engine" \
+"/data/adb/modules/APEX/engines/display.sh"
+
+####################################################
+# Input
+####################################################
+
+[ "$ENABLE_INPUT" = "1" ] && \
+run_engine "Input Engine" \
+"/data/adb/modules/APEX/engines/input.sh"
+
+####################################################
+# Thermal
+####################################################
+
+[ "$ENABLE_THERMAL" = "1" ] && \
+run_engine "Thermal Engine" \
+"/data/adb/modules/APEX/engines/thermal.sh"
+
+echo "[Dispatcher] Done"
