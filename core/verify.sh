@@ -3,30 +3,36 @@
 # APEX
 # Component : Core
 # File      : verify.sh
-# Purpose   : Verify engine execution
+# Purpose   : Verification manager
 #
 # SPDX-License-Identifier: MIT
 #
 
-VERIFY_STATUS="UNKNOWN"
-
 verify_run() {
-    VERIFY_STATUS="PASS"
 
-    # Game still running
-    if [ -z "$(context_get_package)" ] || [ -z "$(context_get_pid)" ]; then
-        VERIFY_STATUS="FAIL"
-    elif ! kill -0 "$(context_get_pid)" 2>/dev/null; then
-        VERIFY_STATUS="FAIL"
-    fi
+    local result=0
 
-    logger_write "VERIFY" "status=$VERIFY_STATUS"
+    for engine in "${REGISTRY_ENGINES[@]}"
+    do
 
-    [ "$VERIFY_STATUS" = "PASS" ]
-}
+        verify "$engine"
 
-verify_status() {
-    printf "%s" "$VERIFY_STATUS"
+        if [ $? -ne 0 ]; then
+
+            logger_write "VERIFY" "$engine failed."
+
+            restore_engine "$engine"
+
+            result=1
+
+        else
+
+            logger_write "VERIFY" "$engine passed."
+        fi
+
+    done
+
+    return "$result"
 }
 
 # End of File
