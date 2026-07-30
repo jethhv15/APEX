@@ -1,46 +1,45 @@
 #!/system/bin/sh
+#
+# APEX Dispatcher
+#
 
-DECISION="/data/adb/modules/APEX/logs/decision.prop"
+MODULE_DIR="/data/adb/modules/APEX"
+ENGINE_DIR="$MODULE_DIR/engines"
+LOGGER="$MODULE_DIR/core/logger.sh"
 
-[ -f "$DECISION" ] || exit 1
+[ -f "$LOGGER" ] && . "$LOGGER"
 
-. "$DECISION"
-
-run_engine() {
-    NAME="$1"
-    SCRIPT="$2"
-
-    echo "[Dispatcher] $NAME"
-
-    if [ -x "$SCRIPT" ]; then
-        sh "$SCRIPT"
+log() {
+    if command -v apex_log >/dev/null 2>&1; then
+        apex_log "$1"
     else
-        echo "[Dispatcher] Missing $SCRIPT"
+        echo "[APEX] $1"
     fi
 }
 
-####################################################
-# Display
-####################################################
+log "Dispatcher started"
 
-[ "$ENABLE_DISPLAY" = "1" ] && \
-run_engine "Display Engine" \
-"/data/adb/modules/APEX/engines/display.sh"
+for ENGINE in "$ENGINE_DIR"/*.sh
+do
+    [ -f "$ENGINE" ] || continue
 
-####################################################
-# Input
-####################################################
+    NAME="$(basename "$ENGINE")"
 
-[ "$ENABLE_INPUT" = "1" ] && \
-run_engine "Input Engine" \
-"/data/adb/modules/APEX/engines/input.sh"
+    log "Executing $NAME"
 
-####################################################
-# Thermal
-####################################################
+    chmod 0755 "$ENGINE"
 
-[ "$ENABLE_THERMAL" = "1" ] && \
-run_engine "Thermal Engine" \
-"/data/adb/modules/APEX/engines/thermal.sh"
+    sh "$ENGINE"
 
-echo "[Dispatcher] Done"
+    RESULT=$?
+
+    if [ "$RESULT" -eq 0 ]; then
+        log "$NAME SUCCESS"
+    else
+        log "$NAME FAILED ($RESULT)"
+    fi
+done
+
+log "Dispatcher finished"
+
+exit 0
