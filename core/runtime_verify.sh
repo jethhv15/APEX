@@ -26,6 +26,8 @@ runtime_verify_run() {
 
         benchmark_score
 
+        session_summary_generate
+
         return 0
 
     fi
