@@ -1,0 +1,7 @@
+#
+# APEX PUBG Profile
+#
+
+PROFILE_NAME=pubg
+PROFILE_ENABLED=1
+GAME_PACKAGE=com.tencent.ig
