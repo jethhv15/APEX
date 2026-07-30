@@ -10,10 +10,14 @@
 
 bootstrap_init() {
     logger_init
-    runtime_init
+
+    logger_write "BOOT" "Bootstrap started."
+
     context_reset
-    capability_scan
     registry_reset
+    capability_scan
+
+    runtime_init
 
     logger_write "BOOT" "Bootstrap completed."
 }
