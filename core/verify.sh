@@ -3,27 +3,30 @@
 # APEX
 # Component : Core
 # File      : verify.sh
-# Purpose   : Verification manager
+# Purpose   : Verify engine execution
 #
 # SPDX-License-Identifier: MIT
 #
 
-verify_result() {
-    [ "$1" = "$2" ]
-}
+VERIFY_STATUS="UNKNOWN"
 
-verify_execute() {
-    local expected="$1"
-    local actual="$2"
-    local tag="$3"
+verify_run() {
+    VERIFY_STATUS="PASS"
 
-    if verify_result "$expected" "$actual"; then
-        logger_write "VERIFY" "$tag: PASS"
-        return 0
+    # Game still running
+    if [ -z "$(context_get_package)" ] || [ -z "$(context_get_pid)" ]; then
+        VERIFY_STATUS="FAIL"
+    elif ! kill -0 "$(context_get_pid)" 2>/dev/null; then
+        VERIFY_STATUS="FAIL"
     fi
 
-    logger_error "VERIFY" "$tag: FAIL"
-    return 1
+    logger_write "VERIFY" "status=$VERIFY_STATUS"
+
+    [ "$VERIFY_STATUS" = "PASS" ]
+}
+
+verify_status() {
+    printf "%s" "$VERIFY_STATUS"
 }
 
 # End of File
