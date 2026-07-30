@@ -3,33 +3,29 @@
 # APEX
 # Component : Audit
 # File      : surface.sh
-# Purpose   : SurfaceFlinger audit
+# Purpose   : SurfaceFlinger Collector
 #
 # SPDX-License-Identifier: MIT
 #
 
-SURFACE_PRESENT=0
-SURFACE_VSYNC=0
+surface_dump() {
 
-audit_surface() {
-    if service list 2>/dev/null | grep -q "SurfaceFlinger"; then
-        SURFACE_PRESENT=1
-    fi
+    local out
 
-    if dumpsys SurfaceFlinger 2>/dev/null | grep -qi "vsync"; then
-        SURFACE_VSYNC=1
-    fi
+    out="$APEX_LOG/surface_$(date +%Y%m%d_%H%M%S).log"
 
-    logger_write "SURFACE" \
-        "present=$SURFACE_PRESENT vsync=$SURFACE_VSYNC"
+    dumpsys SurfaceFlinger > "$out"
+
+    logger_write "AUDIT" "SurfaceFlinger -> $out"
 }
 
-surface_get_present() {
-    printf "%s" "$SURFACE_PRESENT"
-}
+surface_run() {
 
-surface_get_vsync() {
-    printf "%s" "$SURFACE_VSYNC"
+    pidof com.tencent.ig >/dev/null 2>&1 || return 1
+
+    surface_dump
+
+    return 0
 }
 
 # End of File
