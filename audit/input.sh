@@ -8,9 +8,26 @@
 # SPDX-License-Identifier: MIT
 #
 
+INPUT_SERVICE=0
+INPUT_DEVICES=0
+
 audit_input() {
-    registry_set INPUT_METHOD "$(settings get secure default_input_method)"
-    registry_set TOUCH_DEVICE "$(getevent -pl 2>/dev/null | awk '/touch/ {print $2; exit}')"
+    if service list 2>/dev/null | grep -q "input"; then
+        INPUT_SERVICE=1
+    fi
+
+    INPUT_DEVICES="$(find /dev/input -type c 2>/dev/null | wc -l)"
+
+    logger_write "INPUT" \
+        "service=$INPUT_SERVICE devices=$INPUT_DEVICES"
+}
+
+input_get_service() {
+    printf "%s" "$INPUT_SERVICE"
+}
+
+input_get_devices() {
+    printf "%s" "$INPUT_DEVICES"
 }
 
 # End of File
