@@ -26,9 +26,16 @@ bootstrap_init() {
 
     context_reset
     registry_reset
-    capability_scan
 
     runtime_init
+
+    capability_scan
+    audit_android
+    audit_game_detect
+
+    dispatcher_run
+
+    verify_run
 
     logger_write "BOOT" "Bootstrap completed."
 }
