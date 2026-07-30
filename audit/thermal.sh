@@ -3,29 +3,40 @@
 # APEX
 # Component : Audit
 # File      : thermal.sh
-# Purpose   : Thermal subsystem audit
+# Purpose   : Thermal HAL Collector
 #
 # SPDX-License-Identifier: MIT
 #
 
-THERMAL_HAL=0
-THERMAL_ZONES=0
+thermal_dump() {
 
-audit_thermal() {
-    service list 2>/dev/null | grep -qi "thermal" && THERMAL_HAL=1
+    local out
 
-    THERMAL_ZONES="$(find /sys/class/thermal -maxdepth 1 -name "thermal_zone*" 2>/dev/null | wc -l)"
+    out="$APEX_LOG/thermal_$(date +%Y%m%d_%H%M%S).log"
 
-    logger_write "THERMAL" \
-        "hal=$THERMAL_HAL zones=$THERMAL_ZONES"
+    {
+        echo "===== dumpsys thermalservice ====="
+        dumpsys thermalservice 2>/dev/null
+
+        echo
+        echo "===== service list ====="
+        service list | grep -i thermal
+
+        echo
+        echo "===== getprop thermal ====="
+        getprop | grep -i thermal
+    } > "$out"
+
+    logger_write "AUDIT" "Thermal HAL -> $out"
 }
 
-thermal_has_hal() {
-    [ "$THERMAL_HAL" -eq 1 ]
-}
+thermal_run() {
 
-thermal_get_zones() {
-    printf "%s" "$THERMAL_ZONES"
+    pidof com.tencent.ig >/dev/null 2>&1 || return 1
+
+    thermal_dump
+
+    return 0
 }
 
 # End of File
