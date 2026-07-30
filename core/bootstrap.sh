@@ -3,24 +3,15 @@
 # APEX
 # Component : Core
 # File      : bootstrap.sh
-# Purpose   : Bootstrap manager
-#
-# SPDX-License-Identifier: MIT
 #
 
 bootstrap_load_config() {
-    local base
-
-    base="${MODPATH:-${0%/*}/..}"
-
-    [ -f "$base/config/apex.conf" ] && . "$base/config/apex.conf"
-    [ -f "$base/config/policy.conf" ] && . "$base/config/policy.conf"
+    [ -f "$MODULE/config/apex.conf" ] && . "$MODULE/config/apex.conf"
 }
 
 bootstrap_init() {
 
     logger_init
-    logger_write "BOOT" "Bootstrap started."
 
     bootstrap_load_config
 
@@ -31,31 +22,19 @@ bootstrap_init() {
 
     capability_scan
 
-    health_runtime || {
-        logger_write "BOOT" "Health check failed."
-        return 1
-    }
+    health_check
 
     audit_android
-    audit_game_detect
 
-    decision_run || {
-        logger_write "BOOT" "Decision failed."
-        return 1
-    }
+    analyzer_run
 
-    dispatcher_run || {
-        logger_write "BOOT" "Dispatcher failed."
-        return 1
-    }
+    decision_run
 
-    verify_run || {
-        logger_write "BOOT" "Verification failed."
-        restore_run
-        return 1
-    }
+    dispatcher_run
 
-    logger_write "BOOT" "Bootstrap completed."
+    verify_run
+
+    logger_write
 
     return 0
 }
