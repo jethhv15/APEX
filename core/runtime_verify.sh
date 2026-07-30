@@ -22,6 +22,8 @@ runtime_verify_run() {
 
         benchmark_compare
 
+        benchmark_regression
+
         return 0
 
     fi
