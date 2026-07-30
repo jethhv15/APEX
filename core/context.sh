@@ -1,53 +1,64 @@
 #!/system/bin/sh
 #
-# APEX
-# Component : Core
-# File      : context.sh
-# Purpose   : Runtime context manager
-#
-# SPDX-License-Identifier: MIT
+# APEX Runtime Context
 #
 
-CONTEXT_PACKAGE=""
-CONTEXT_PID=""
-CONTEXT_PROFILE="default"
+MODULE_DIR="/data/adb/modules/APEX"
 
-context_reset() {
-    CONTEXT_PACKAGE=""
-    CONTEXT_PID=""
-    CONTEXT_PROFILE="default"
-}
+export APEX_MODULE="$MODULE_DIR"
 
-context_set_package() {
-    CONTEXT_PACKAGE="$1"
+########################################
+# Device
+########################################
 
-    case "$1" in
-        com.tencent.ig)
-            CONTEXT_PROFILE="pubg"
-            ;;
-        com.garena.game.codm)
-            CONTEXT_PROFILE="codm"
-            ;;
-        *)
-            CONTEXT_PROFILE="default"
-            ;;
-    esac
-}
+export APEX_DEVICE="$(getprop ro.product.device)"
+export APEX_MODEL="$(getprop ro.product.model)"
+export APEX_BRAND="$(getprop ro.product.brand)"
 
-context_get_package() {
-    printf "%s" "$CONTEXT_PACKAGE"
-}
+########################################
+# Android
+########################################
 
-context_set_pid() {
-    CONTEXT_PID="$1"
-}
+export APEX_ANDROID="$(getprop ro.build.version.release)"
+export APEX_API="$(getprop ro.build.version.sdk)"
 
-context_get_pid() {
-    printf "%s" "$CONTEXT_PID"
-}
+########################################
+# Kernel
+########################################
 
-context_get_profile() {
-    printf "%s" "$CONTEXT_PROFILE"
-}
+export APEX_KERNEL="$(uname -r)"
 
-# End of File
+########################################
+# Game
+########################################
+
+GAME=""
+
+pidof com.tencent.ig >/dev/null 2>&1 && GAME="PUBG"
+
+export APEX_GAME="$GAME"
+
+########################################
+# Profile
+########################################
+
+PROFILE="default"
+
+case "$GAME" in
+    PUBG)
+        PROFILE="pubg"
+        ;;
+esac
+
+export APEX_PROFILE="$PROFILE"
+
+########################################
+# Paths
+########################################
+
+export APEX_LOG="$MODULE_DIR/logs"
+export APEX_ENGINE="$MODULE_DIR/engines"
+export APEX_CONFIG="$MODULE_DIR/config"
+export APEX_PROFILE_DIR="$MODULE_DIR/profiles"
+
+return 0
